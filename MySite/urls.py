@@ -21,9 +21,8 @@ from users import views as user_views
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from blog import  views as blog_views
-
-
+from blog import views as blog_views
+from review.views import ReviewEmailView
 
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -33,10 +32,27 @@ router.register(r'groups', blog_views.GroupViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('reviews/', ReviewEmailView.as_view(), name="reviews"),
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    path('password-reset/',
+         auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
+         name='password_reset'),
+    path('password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'),
+         name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', #user id encoded in b64 / password valid
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='users/password_reset_confirm.html'
+         ),
+         name='password_reset_confirm'),
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='users/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
     path('', include('blog.urls')),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

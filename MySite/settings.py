@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os.path
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'rest_framework',
-    'rest_framework_swagger'
+    'rest_framework_swagger',
+    'review',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +147,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'my.siteitis913@gmail.com'
+EMAIL_HOST_PASSWORD = 'lzxvwyenqbnmvafr'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'my.siteitis913@gmail.com'
+
