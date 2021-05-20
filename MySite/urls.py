@@ -17,6 +17,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_swagger.views import get_swagger_view
+
 from users import views as user_views
 from django.urls import path, include
 from django.contrib.auth.models import User
@@ -30,8 +32,12 @@ router = routers.DefaultRouter()
 router.register(r'users', blog_views.UserViewSet)
 router.register(r'groups', blog_views.GroupViewSet)
 
+
+schema_view = get_swagger_view(title='API')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('chat/', include('chat.urls')),
     path('reviews/', ReviewEmailView.as_view(), name="reviews"),
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
@@ -56,8 +62,10 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('docs/', schema_view),
 ]
 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
